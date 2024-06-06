@@ -35,7 +35,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: BlocProvider<CounterBloc>(
+        create: (context) => CounterBloc(),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -59,7 +63,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counterBloc = CounterBloc();
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -102,13 +105,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BlocBuilder<CounterBloc, CounterState>(
                 buildWhen: (previous, current) {
-                  return true;
-                },
-                bloc: counterBloc,
-                builder: (context, state) {
-                  return Text(state.count.toString(),
-                      style: Theme.of(context).textTheme.headlineMedium);
-                }),
+              return true;
+            }, builder: (context, state) {
+              return Text(state.count.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium);
+            }),
           ],
         ),
       ),
@@ -117,14 +118,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             onPressed: () {
-              counterBloc.add(CounterIncrementEvent());
+              context.read<CounterBloc>().add(CounterIncrementEvent());
             },
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           FloatingActionButton(
             onPressed: () {
-              counterBloc.add(CounterDecrementEvent());
+              context.read<CounterBloc>().add(CounterDecrementEvent());
             },
             tooltip: 'Decrement',
             child: const Icon(Icons.minimize),
