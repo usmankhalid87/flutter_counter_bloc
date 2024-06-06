@@ -101,6 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             BlocBuilder<CounterBloc, CounterState>(
+                buildWhen: (previous, current) {
+                  return true;
+                },
                 bloc: counterBloc,
                 builder: (context, state) {
                   return Text(state.count.toString(),
@@ -109,12 +112,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          counterBloc.add(CounterIncrementEvent());
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              counterBloc.add(CounterIncrementEvent());
+            },
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              counterBloc.add(CounterDecrementEvent());
+            },
+            tooltip: 'Decrement',
+            child: const Icon(Icons.minimize),
+          )
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
